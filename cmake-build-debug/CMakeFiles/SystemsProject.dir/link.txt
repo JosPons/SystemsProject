@@ -1,1 +1,0 @@
-/usr/bin/cc -g  -Wl,--enable-auto-import CMakeFiles/SystemsProject.dir/main.c.o  -o SystemsProject.exe -Wl,--out-implib,libSystemsProject.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
