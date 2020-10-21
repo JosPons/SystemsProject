@@ -7,12 +7,12 @@ int main(void) {
     typedef struct Listnode
     {
 
-        char* same_item_string;                 //ena stng me ta koina items metaksu istotopwn.
+        char* same_item_string;                 //ena stng me ta koina items metaksu istotopwn (orizontia)
         struct node *next;
     }Llist;
-    typedef struct array
+    typedef struct content_table
     {
-
+        Llist  *list_ptr;
         char* item_address;    //e.g amazon /ebay /ktl
         int potition;                 //arithmos theshs ston pinaka me ola ta records twn istotopwn
     }content_table;
@@ -45,7 +45,7 @@ int main(void) {
     fclose(fp);
     printf("The file %s has %d lines\n ", filename, count);*/
 //////////////////////////////////////////////////////////////////////
-    int count = 0;
+    int count,i = 0;
     struct dirent *de;  // pointer sto directory
 
 
@@ -61,9 +61,26 @@ int main(void) {
         count++;
 
     closedir(dr);
+    Llist * head = NULL;
+    head = (Llist *) malloc(sizeof(Llist));
+    if (head == NULL) {
+        return 1;
+    }
 
-    Llist ** array;
-    array = malloc(count * sizeof(Llist*));
+    content_table array_contents[count] ;
+    for (i=0;i>=count;i++)
+    {
+        array_contents[i].list_ptr = NULL;
+        array_contents[i].list_ptr = (Llist *) malloc(sizeof(Llist));
+        /*if (array_contents[i].list_ptr == NULL) {
+            return 1;
+        }*/
+        array_contents[i].item_address=NULL;
+        array_contents[i].potition=0;
+
+    }
+    //Llist * array;   //pinakas apo deiktes pou deixnoun se llist nodes
+    //array = malloc(count * sizeof(Llist*));
 
     return 0;
 
