@@ -63,25 +63,28 @@ int main(void) {
     while ((de = readdir(dr)) != NULL)             //mporoume na paiksoume me readdir?!!!! diavasma arxeiwn katalogou gia malloc array
     {
         count++;
-        printf("%s\n", de->d_name); //DIR NAME
+       // printf("%s\n", de->d_name); //DIR NAME
 
     }
 
     closedir(dr);
 ///////////////////////////////////////////
-    printf( "%d", count);
-    list_node * head = NULL;
-    head = (list_node *) malloc(sizeof(list_node));
+    printf( "%d \n", count);
+
+
+    /*  list_node * head = NULL;
+  head = (list_node *) malloc(sizeof(list_node));
     if (head == NULL)
     {
         return 1;
-    }
+    }*/
 
     content_table array_contents[count] ;
     for (i=0;i>=count;i++)
     {
         array_contents[i].list_ptr = NULL;
         array_contents[i].list_ptr = (list_node *) malloc(sizeof(list_node));
+
         /*if (array_contents[i].list_ptr == NULL) {
             return 1;
         }*/
@@ -136,16 +139,18 @@ int main(void) {
             }
 
 
-            /*TA GRAFW OLA SE MAIN GIATI EIMAI DOULEIA.MEXRI TWRA DIAVASAME DIRECTORIES GIA NA VROUME POSA EINAI SUNOLO (EBAY/AMAZON/KTL )KAI
-             FTIAXNOUME ENA PINAKA APO STRUCTS DEIKTWN SE LINKED LISTS ME PLHTHOS AUTO ,TWN DIRECTORIES.
-            KATHE DIRECTORY ADISTOIXEI SE MIA THESH STON ARRAY ,OPOTE KSANADIAVASAME GIA NA VALOUME SE KATHE THESH TOU ARRAY NAME APO PROION
-             KAI ADISTOIXIA ME TON EUATO TOU.
-             META DIAVASAME TO EXCEL KAI THA FTIAXTOUN
-            OI KOMVOI THS LISTAS KAI ANALOGA ME TO AN YPARXEI 1 STO 3o PEDIO KATHE GRAMMHS TOU EXCELL .EDW PAIZEITAI OLO TO PRAGMA
-            ME TO PWS THA KANOUME TIS SUGKRISEIS APODOTIKA NA MHN KSANAGURNAME PISW SUNEXEIA .EPISHS ISWS H PRWTH DOMH STRUCT ARRAY ISWS PREPEI NA GINEI DENTRO*/
-
 
         }
+
+    /*TA GRAFW OLA SE MAIN GIATI EIMAI DOULEIA.PROFANWS THELOUN ORGANWSH SE HEADERS,.C KTL.
+      MEXRI TWRA DIAVASAME DIRECTORIES GIA NA VROUME POSA EINAI SUNOLO (EBAY/AMAZON/KTL )KAI
+       FTIAXNOUME ENA PINAKA APO STRUCTS DEIKTWN SE LINKED LISTS ME PLHTHOS AUTO ,TWN DIRECTORIES.
+      KATHE DIRECTORY ADISTOIXEI SE MIA THESH STON ARRAY ,OPOTE KSANADIAVASAME GIA NA VALOUME SE KATHE THESH TOU ARRAY NAME APO PROION
+       KAI ADISTOIXIA ME TON EUATO TOU.
+       META DIAVASAME TO EXCEL KAI THA FTIAXTOUN
+      OI KOMVOI THS LISTAS KAI ANALOGA ME TO AN YPARXEI 1 STO 3o PEDIO KATHE GRAMMHS TOU EXCELL .EDW PAIZEITAI OLO TO PRAGMA
+      ME TO PWS THA KANOUME TIS SUGKRISEIS APODOTIKA NA MHN KSANAGURNAME PISW SUNEXEIA .EPISHS ISWS H PRWTH DOMH STRUCT ARRAY ISWS PREPEI NA GINEI DENTRO*/
+
 
     return 0;
 
