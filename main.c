@@ -64,6 +64,7 @@ int main(void) {
     {
         count++;
         printf("%s\n", de->d_name); //DIR NAME
+
     }
 
     closedir(dr);
@@ -95,6 +96,23 @@ int main(void) {
     //array = malloc(count * sizeof(Llist*));
 
     ///////////////////////////////////
+   opendir(dr);      // opendir() =epistrefei pointer tou directory.
+    i=0;
+    if (dr == NULL)  //
+    {
+        printf("Could not open current directory" );
+        return 0;
+    }
+
+    while ((de = readdir(dr)) != NULL)
+    {
+        array_contents[i].item_address = de->d_name;
+        array_contents[i].potition=i;
+        array_contents[i].list_ptr->same_item_string=de->d_name;
+        i++;
+    }
+
+    closedir(dr);
 
 
 
@@ -106,14 +124,13 @@ int main(void) {
         {
             char* tmp = strdup(line);
             char* tok;
-            for (tok = strtok(line, ";");
+            for (tok = strtok(line, ",");
                  tok && *tok;
-                 tok = strtok(NULL, ";\n"))
+                 tok = strtok(NULL, ",\n"))
             {
-                if (tok!=NULL)
+                if (tok!=NULL && tok != "0")
                 {
-                    printf("Field 3 would be %s\n", tok);
-
+                    printf("Field 3 is 1.MAKE LIST  %s\n");
 
                 }
                 free(tmp);
