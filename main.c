@@ -7,22 +7,22 @@ int main(void) {
     typedef struct Listnode
     {
 
-        char* sameitemstring;
+        char* same_item_string;                 //ena stng me ta koina items metaksu istotopwn.
         struct node *next;
     }Llist;
     typedef struct array
     {
 
-        char* itemaddress;
-        int potition;
-    }Content_table;
+        char* item_address;    //e.g amazon /ebay /ktl
+        int potition;                 //arithmos theshs ston pinaka me ola ta records twn istotopwn
+    }content_table;
 
-    //// gia tuxon data
-    /*llist **new_array;
-    new_array = realloc(array, new_size * sizeof(LList*));
-    */
-///file  count lines mallon de xreiazetai
-    /*FILE *fp;
+    /* //// gia tuxon new data
+     llist **new_array;
+     new_array = realloc(array, new_size * sizeof(LList*));
+     */
+    /*    ///file  count lines mallon de xreiazetai
+    FILE *fp;
 
     char filename[".json"];
     char c;
@@ -44,20 +44,20 @@ int main(void) {
 
     fclose(fp);
     printf("The file %s has %d lines\n ", filename, count);*/
-
+//////////////////////////////////////////////////////////////////////
     int count = 0;
     struct dirent *de;  // pointer sto directory
 
-    // opendir() =epistrefei pointer tou directory.
-    DIR *dr = opendir("C:\\Users\\Yannis\\Datasets\\");
+
+    DIR *dr = opendir("C:\\Users\\Yannis\\Datasets\\");      // opendir() =epistrefei pointer tou directory.
 
     if (dr == NULL)  //
     {
         printf("Could not open current directory" );
         return 0;
     }
-    //mporoume na paiksoume me readdir?!!!!
-    while ((de = readdir(dr)) != NULL)
+
+    while ((de = readdir(dr)) != NULL)             //mporoume na paiksoume me readdir?!!!! diavasma arxeiwn katalogou gia malloc array
         count++;
 
     closedir(dr);
