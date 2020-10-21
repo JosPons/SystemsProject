@@ -2,17 +2,19 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <dirent.h>
+#include <string.h>
 
 int main(void) {
-    typedef struct Listnode
+    typedef struct listnode
     {
 
         char* same_item_string;                 //ena stng me ta koina items metaksu istotopwn (orizontia)
         struct node *next;
-    }Llist;
-    typedef struct content_table
+    }list_node;
+
+    typedef struct contenttable
     {
-        Llist  *list_ptr;
+        list_node  *list_ptr;
         char* item_address;    //e.g amazon /ebay /ktl
         int potition;                 //arithmos theshs ston pinaka me ola ta records twn istotopwn
     }content_table;
@@ -45,11 +47,12 @@ int main(void) {
     fclose(fp);
     printf("The file %s has %d lines\n ", filename, count);*/
 //////////////////////////////////////////////////////////////////////
-    int count,i = 0;
+    int count = 0;
+    int i ;
     struct dirent *de;  // pointer sto directory
 
 
-    DIR *dr = opendir("C:\\Users\\Yannis\\Datasets\\");      // opendir() =epistrefei pointer tou directory.
+    DIR *dr = opendir("C:\\Users\\g.kabardis\\Downloads\\");      // opendir() =epistrefei pointer tou directory.
 
     if (dr == NULL)  //
     {
@@ -58,12 +61,18 @@ int main(void) {
     }
 
     while ((de = readdir(dr)) != NULL)             //mporoume na paiksoume me readdir?!!!! diavasma arxeiwn katalogou gia malloc array
+    {
         count++;
+        printf("%s\n", de->d_name); //DIR NAME
+    }
 
     closedir(dr);
-    Llist * head = NULL;
-    head = (Llist *) malloc(sizeof(Llist));
-    if (head == NULL) {
+///////////////////////////////////////////
+    printf( "%d", count);
+    list_node * head = NULL;
+    head = (list_node *) malloc(sizeof(list_node));
+    if (head == NULL)
+    {
         return 1;
     }
 
@@ -71,7 +80,7 @@ int main(void) {
     for (i=0;i>=count;i++)
     {
         array_contents[i].list_ptr = NULL;
-        array_contents[i].list_ptr = (Llist *) malloc(sizeof(Llist));
+        array_contents[i].list_ptr = (list_node *) malloc(sizeof(list_node));
         /*if (array_contents[i].list_ptr == NULL) {
             return 1;
         }*/
@@ -79,8 +88,41 @@ int main(void) {
         array_contents[i].potition=0;
 
     }
+    //char str[500000000000];
+    ///////////////////////////////////////////////////////////////
+
     //Llist * array;   //pinakas apo deiktes pou deixnoun se llist nodes
     //array = malloc(count * sizeof(Llist*));
+
+    ///////////////////////////////////
+
+
+
+
+        FILE* stream = fopen("test.csv","r"); //diavasma excel gia dhmiourgia LISTWN
+
+        char line[1024];
+        while (fgets(line, 1024, stream))
+        {
+            char* tmp = strdup(line);
+            char* tok;
+            for (tok = strtok(line, ";");
+                 tok && *tok;
+                 tok = strtok(NULL, ";\n"))
+            {
+                if (tok!=NULL)
+                {
+                    printf("Field 3 would be %s\n", tok);
+
+
+                }
+                free(tmp);
+            }
+
+
+
+
+        }
 
     return 0;
 
