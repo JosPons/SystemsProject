@@ -9,13 +9,13 @@ int main(void) {
 
         char* sameitemstring;
         struct node *next;
-    }llist;
+    }Llist;
     typedef struct array
     {
 
         char* itemaddress;
         int potition;
-    }contenttable;
+    }Content_table;
 
     //// gia tuxon data
     /*llist **new_array;
@@ -62,8 +62,8 @@ int main(void) {
 
     closedir(dr);
 
-    llist ** array;
-    array = malloc(count * sizeof(llist*));
+    Llist ** array;
+    array = malloc(count * sizeof(Llist*));
 
     return 0;
 
