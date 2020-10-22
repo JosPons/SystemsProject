@@ -50,9 +50,11 @@ int main(void) {
     int count = 0;
     int i ;
     struct dirent *de;  // pointer sto directory
-
-
-    DIR *dr = opendir("C:\\Users\\g.kabardis\\Downloads\\");      // opendir() =epistrefei pointer tou directory.
+    char* prev_dir;
+    char* temp;
+     int count2=0;
+     int countdif[20];
+    DIR *dr = opendir("C:\\Users\\yannis\\Desktop");      // opendir() =epistrefei pointer tou directory.
 
     if (dr == NULL)  //
     {
@@ -62,14 +64,22 @@ int main(void) {
 
     while ((de = readdir(dr)) != NULL)             //mporoume na paiksoume me readdir?!!!! diavasma arxeiwn katalogou gia malloc array
     {
-        count++;
-       // printf("%s\n", de->d_name); //DIR NAME
+        temp=de->d_name;           //epeidh xalaei to arxiko string h strtok
+        count++;   //sunolo arxeiwn
+        count2++;
+        if (de->d_name != prev_dir)    //otan allaksei directory krataw posa stoixeia eixe se auto to dir gia grhgorh anazhthsh meta ,mhn psaxnw olo to array.
+        {
 
+          countdif[i]=count2;
+          count2=0;
+        }
+       // printf("%s\n", de->d_name); //DIR NAME
+      prev_dir= strtok(temp, "//");
     }
 
     closedir(dr);
 ///////////////////////////////////////////
-    printf( "%d \n", count);
+    printf( " arithmos stoixeiwn ->Ara kai megethos domhs pinaka = %d \n", count);
 
 
     /*  list_node * head = NULL;
@@ -80,7 +90,7 @@ int main(void) {
     }*/
 
     content_table array_contents[count] ;
-    for (i=0;i>=count;i++)
+    for (i=0;i<=count;i++)
     {
         array_contents[i].list_ptr = NULL;
         array_contents[i].list_ptr = (list_node *) malloc(sizeof(list_node));
@@ -92,6 +102,8 @@ int main(void) {
         array_contents[i].potition=0;
 
     }
+
+    printf(" array arxikopoihsh done \n");
     //char str[500000000000];
     ///////////////////////////////////////////////////////////////
 
@@ -99,7 +111,7 @@ int main(void) {
     //array = malloc(count * sizeof(Llist*));
 
     ///////////////////////////////////
-   opendir(dr);      // opendir() =epistrefei pointer tou directory.
+      dr=opendir("C:\\Users\\yannis\\Desktop");      // opendir() =epistrefei pointer tou directory.
     i=0;
     if (dr == NULL)  //
     {
@@ -110,13 +122,14 @@ int main(void) {
     while ((de = readdir(dr)) != NULL)
     {
         array_contents[i].item_address = de->d_name;
+     // printf("%s \n",de->d_name);
         array_contents[i].potition=i;
-        array_contents[i].list_ptr->same_item_string=de->d_name;
+        array_contents[i].list_ptr->same_item_string=de->d_name;   // a=a , b=b ktl
         i++;
     }
 
     closedir(dr);
-
+  printf("dhmiourgia domhs kai eisagwgh data done \n");
 
 
         FILE* stream = fopen("test.csv","r"); //diavasma excel gia dhmiourgia LISTWN
@@ -132,7 +145,10 @@ int main(void) {
             {
                 if (tok!=NULL && tok != "0")
                 {
-                    printf("Field 3 is 1.MAKE LIST  %s\n");
+                    printf("Field 3 is 1.change pointers between array and lists  %s\n");
+                   /* algorithmos pou tha vazei th thesh next tou pinaka domhs me vash to deutero token na deixnei sto next tou teleutaiou deikth sundedemenhs
+                    listas tou stoixeiou kurias domhs me vash to prwto token .(phgainodas stis theseis tou ekastote countdif) gia na mhn psaxnei olh th domh gia kathe token.)/*
+                  */
 
                 }
                 free(tmp);
