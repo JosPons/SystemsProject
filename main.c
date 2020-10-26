@@ -16,7 +16,7 @@ int main(void) {
     {
         list_node  *list_ptr;
         char* item_address;    //e.g amazon /ebay /ktl
-        int potition;                 //arithmos theshs ston pinaka me ola ta records twn istotopwn
+        int position;                 //arithmos theshs ston pinaka me ola ta records twn istotopwn
     }content_table;
 
     /* //// gia tuxon new data
@@ -99,7 +99,7 @@ int main(void) {
             return 1;
         }*/
         array_contents[i].item_address=NULL;
-        array_contents[i].potition=0;
+        array_contents[i].position=0;
 
     }
 
@@ -123,7 +123,7 @@ int main(void) {
     {
         array_contents[i].item_address = de->d_name;
      // printf("%s \n",de->d_name);
-        array_contents[i].potition=i;
+        array_contents[i].position=i;
         array_contents[i].list_ptr->same_item_string=de->d_name;   // a=a , b=b ktl
         i++;
     }
