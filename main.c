@@ -12,7 +12,7 @@ int main(void) {
     printf("Enter FILE PATH: \n");
 
     printf(" location hint :   'C:\\Users\\yannis\\Desktop\\camera_specs\\2013_camera_specs\\'    \n");
-    scanf("%s", filename);
+    //scanf("%s", filename);
     filename="C:\\Users\\yannis\\Desktop\\camera_specs\\2013_camera_specs\\";
 
 
