@@ -9,11 +9,12 @@ int main(void) {
 
     char *filename;
 
-    printf("Enter FILE PATH: ");
-    //scanf("%s", filename);
+    printf("Enter FILE PATH: \n");
 
-    filename="C:\\Users\\g.kabardis\\Desktop\\camera_specs\\2013_camera_specs\\";
-    printf("%s \n ", filename);
+    printf(" location hint :   'C:\\Users\\yannis\\Desktop\\camera_specs\\2013_camera_specs\\'    \n");
+    scanf("%s", filename);
+    filename="C:\\Users\\yannis\\Desktop\\camera_specs\\2013_camera_specs\\";
+
 
     DIR *dr = opendir(filename);     //epistrefei pointer tou directory.
     if (dr == NULL)  //
@@ -133,7 +134,7 @@ int main(void) {
 
     printf("dhmiourgia domhs kai eisagwgh data done \n");
 
-    FILE *stream = fopen("C:\\Users\\g.kabardis\\Desktop\\sigmod_medium_labelled_dataset.csv",
+    FILE *stream = fopen("C:\\Users\\yannis\\Desktop\\sigmod_medium_labelled_dataset.csv",
                          "r"); //diavasma excel gia dhmiourgia LISTWN
 
     char line[1024];
