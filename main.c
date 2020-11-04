@@ -1,164 +1,165 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <malloc.h>
-#include <dirent.h>
-#include <string.h>
+
+#include "definitions.h"
 
 int main(void) {
-    typedef struct listnode
-    {
 
-        char* same_item_string;                 //ena stng me ta koina items metaksu istotopwn (orizontia)
-        struct node *next;
-    }list_node;
 
-    typedef struct contenttable
-    {
-        list_node  *list_ptr;
-        char* item_address;    //e.g amazon /ebay /ktl
-        int position;                 //arithmos theshs ston pinaka me ola ta records twn istotopwn
-    }content_table;
-
-    /* //// gia tuxon new data
-     llist **new_array;
-     new_array = realloc(array, new_size * sizeof(LList*));
-     */
-    /*    ///file  count lines mallon de xreiazetai
-    FILE *fp;
-
-    char filename[".json"];
-    char c;
-
-    printf("Enter file name: ");
-    scanf("%s", filename);
-
-    fp = fopen(filename, "r");
-
-    if (fp == NULL)
-    {
-        printf("Could not open file %s", filename);
-        return 0;
-    }
-
-    for (c = getc(fp); c != EOF; c = getc(fp))
-        if (c == '\n')
-            count = count + 1;
-
-    fclose(fp);
-    printf("The file %s has %d lines\n ", filename, count);*/
-//////////////////////////////////////////////////////////////////////
-    int count = 0;
-    int i ;
     struct dirent *de;  // pointer sto directory
-    char* prev_dir;
-    char* temp;
-     int count2=0;
-     int countdif[20];
-    DIR *dr = opendir("C:\\Users\\yannis\\Desktop");      // opendir() =epistrefei pointer tou directory.
 
+    char *filename;
+
+    printf("Enter FILE PATH: ");
+    //scanf("%s", filename);
+
+    filename="C:\\Users\\g.kabardis\\Desktop\\camera_specs\\2013_camera_specs\\";
+    printf("%s \n ", filename);
+
+    DIR *dr = opendir(filename);     //epistrefei pointer tou directory.
     if (dr == NULL)  //
     {
-        printf("Could not open current directory" );
+        printf("Could not open current directory");
         return 0;
     }
-
-    while ((de = readdir(dr)) != NULL)             //mporoume na paiksoume me readdir?!!!! diavasma arxeiwn katalogou gia malloc array
-    {
-        temp=de->d_name;           //epeidh xalaei to arxiko string h strtok
-        count++;   //sunolo arxeiwn
-        count2++;
-        if (de->d_name != prev_dir)    //otan allaksei directory krataw posa stoixeia eixe se auto to dir gia grhgorh anazhthsh meta ,mhn psaxnw olo to array.
-        {
-
-          countdif[i]=count2;
-          count2=0;
-        }
-       // printf("%s\n", de->d_name); //DIR NAME
-      prev_dir= strtok(temp, "//");
+    int count = 0;
+    while ((de = readdir(dr)) !=
+           NULL) {
+        count++;   //sunolo arxeiwn directory  (ebay,amazon,ebet ktl)
     }
+    //closedir(dr);
+    printf(" arithmos directories = %d \n", count - 2);
+    ///////////////////////////////////////////////////////////////////////////
+    rewinddir(dr);
+    char *dir_array[count - 2];
 
-    closedir(dr);
-///////////////////////////////////////////
-    printf( " arithmos stoixeiwn ->Ara kai megethos domhs pinaka = %d \n", count);
-
-
-    /*  list_node * head = NULL;
-  head = (list_node *) malloc(sizeof(list_node));
-    if (head == NULL)
-    {
-        return 1;
-    }*/
-
-    content_table array_contents[count] ;
-    for (i=0;i<=count;i++)
-    {
-        array_contents[i].list_ptr = NULL;
-        array_contents[i].list_ptr = (list_node *) malloc(sizeof(list_node));
-
-        /*if (array_contents[i].list_ptr == NULL) {
-            return 1;
-        }*/
-        array_contents[i].item_address=NULL;
-        array_contents[i].position=0;
-
-    }
-
-    printf(" array arxikopoihsh done \n");
-    //char str[500000000000];
-    ///////////////////////////////////////////////////////////////
-
-    //Llist * array;   //pinakas apo deiktes pou deixnoun se llist nodes
-    //array = malloc(count * sizeof(Llist*));
-
-    ///////////////////////////////////
-      dr=opendir("C:\\Users\\yannis\\Desktop");      // opendir() =epistrefei pointer tou directory.
-    i=0;
-    if (dr == NULL)  //
-    {
-        printf("Could not open current directory" );
-        return 0;
-    }
-
-    while ((de = readdir(dr)) != NULL)
-    {
-        array_contents[i].item_address = de->d_name;
-     // printf("%s \n",de->d_name);
-        array_contents[i].position=i;
-        array_contents[i].list_ptr->same_item_string=de->d_name;   // a=a , b=b ktl
+    int json_num[count - 2];        //pinakas me arithmos json ana directory
+    int i = 0;
+    while ((de = readdir(dr)) !=
+           NULL) {
+        dir_array[i] = malloc((strlen(de->d_name) + 1) * sizeof(char));
+        strcpy(dir_array[i], de->d_name);       //array me directories selidwn
+        //printf("%s\n",dir_array[i]);
         i++;
     }
 
     closedir(dr);
-  printf("dhmiourgia domhs kai eisagwgh data done \n");
+    //strcpy(filename, temp);
+    //rewinddir(dr);
+    ////////////////////////////////////////////////////
+//"C:\\Users\\yannis\\Desktop\\camera_specs\\2013_camera_specs\\"
+    // char *dir= malloc(((strlen(filename) +1)*2)* sizeof(char ));  //mporei na ginei auto gt malloc se kathe loop, isws einai xeirotero logw pollwn malloc
 
-
-        FILE* stream = fopen("test.csv","r"); //diavasma excel gia dhmiourgia LISTWN
-
-        char line[1024];
-        while (fgets(line, 1024, stream))
-        {
-            char* tmp = strdup(line);
-            char* tok;
-            for (tok = strtok(line, ",");
-                 tok && *tok;
-                 tok = strtok(NULL, ",\n"))
-            {
-                if (tok!=NULL && tok != "0")
-                {
-                    printf("Field 3 is 1.change pointers between array and lists  %s\n");
-                   /* algorithmos pou tha vazei th thesh next tou pinaka domhs me vash to deutero token na deixnei sto next tou teleutaiou deikth sundedemenhs
-                    listas tou stoixeiou kurias domhs me vash to prwto token .(phgainodas stis theseis tou ekastote countdif) gia na mhn psaxnei olh th domh gia kathe token.)/*
-                  */
-
-                }
-                free(tmp);
-            }
-
-
-
+    int count2 = 0;
+    for (i = 0; i <= count - 2; i++) {
+        char *dir = malloc((strlen(filename) + strlen(dir_array[i]) + 2) * sizeof(char));
+        strcpy(dir, filename);
+        strcat(dir, dir_array[i]);
+        count2 = 0;
+        //printf(dir);
+        dr = opendir(dir);
+        if (dr == NULL) {
+            printf(dir);
+            printf("Could not open current directory\n");
+            return 0;
         }
 
-    /*TA GRAFW OLA SE MAIN GIATI EIMAI DOULEIA.PROFANWS THELOUN ORGANWSH SE HEADERS,.C KTL.
+        while ((de = readdir(dr)) !=
+               NULL) {
+            count2++;       // arithmos json
+            // printf("  %s \n", de->d_name ); //DIR NAME
+        }
+        json_num[i] = count2 - 2;
+
+        printf("arithmos json  gia kathe directory %d\n", json_num[i]); //DIR NAME
+        free(dir);
+
+    }
+    //printf("rdy\n");
+    // closedir(dr);
+///////////////////////////////////////////
+    int total = 0;
+    for (i = 0; i <= count - 2; i++) {
+        total = total + json_num[i];
+
+    }
+    printf("sunolikos arithmos json,ara kai megethos domhs  %d\n", total);
+
+    list_node *head = NULL;
+    head = (list_node *) malloc(sizeof(list_node));
+    if (head == NULL) {
+        return 1;
+    }
+
+    content_table array_contents[total];
+    for (i = 0; i <= count - 2; i++) {
+        array_contents[i].list_ptr = NULL;
+        array_contents[i].list_ptr = (list_node *) malloc(sizeof(list_node));
+
+        array_contents[i].spec_id = NULL;
+        array_contents[i].site_address = NULL;
+
+    }
+
+    printf(" domh arxikopoihsh done \n");
+
+    //rewinddir(dr);
+    ////////////////////////////////////////////////////
+    for (i = 0; i <= count - 2; i++) {
+        char *dir = malloc((strlen(filename) + strlen(dir_array[i]) + 2) * sizeof(char));
+        strcpy(dir, filename);
+        strcat(dir, dir_array[i]);
+
+        dr = opendir(dir);//
+        if (dr == NULL)  //
+        {
+            printf("Could not open current directory\n");
+            return 0;
+        }
+
+        while ((de = readdir(dr)) !=
+               NULL) {
+            array_contents[i].spec_id = malloc((strlen(de->d_name) + 1) * sizeof(char));
+            strcpy(array_contents[i].spec_id, de->d_name);
+            array_contents[i].site_address = malloc((strlen( dir_array[i]) + 1) * sizeof(char));
+            strcpy(array_contents[i].site_address, dir_array[i]);
+            //array_contents[i].list_ptr->json_id=malloc((strlen( dir_array[i]) +strlen( de->d_name) + 1) * sizeof(char));
+            //strcpy(array_contents[i].list_ptr->json_id, de->d_name);   // a=a , b=b ktl
+            i++;
+        }
+        //countdif[i] = count2-2;
+        // printf("%d\n", countdif[i]); //DIR NAME
+        free(dir);
+    }
+
+    printf("dhmiourgia domhs kai eisagwgh data done \n");
+
+    FILE *stream = fopen("C:\\Users\\g.kabardis\\Desktop\\sigmod_medium_labelled_dataset.csv",
+                         "r"); //diavasma excel gia dhmiourgia LISTWN
+
+    char line[1024];
+    while (fgets(line, 1024, stream)) {
+        char *tmp = strdup(line);
+        char *tok;
+        for (tok = strtok(tmp, ",");
+             tok && *tok;
+             tok = strtok(NULL, "")) {
+            if (tok != NULL && tok != "0") {
+                // epistrefei ola ta tokens me th seira.to 3o einai to 1 h 0
+                //      edw tha trexei o algorithmos ths listas
+                //  printf("diavasma excel file %s \n",tok);
+            }
+
+        }
+        free(tmp);
+    }
+    printf("Field 3 is 1.change pointers between array and lists  \n");
+
+    free(stream);
+
+    return 0;
+
+}
+/*      PROFANWS THELOUN ORGANWSH SE HEADERS,.C KTL.
       MEXRI TWRA DIAVASAME DIRECTORIES GIA NA VROUME POSA EINAI SUNOLO (EBAY/AMAZON/KTL )KAI
        FTIAXNOUME ENA PINAKA APO STRUCTS DEIKTWN SE LINKED LISTS ME PLHTHOS AUTO ,TWN DIRECTORIES.
       KATHE DIRECTORY ADISTOIXEI SE MIA THESH STON ARRAY ,OPOTE KSANADIAVASAME GIA NA VALOUME SE KATHE THESH TOU ARRAY NAME APO PROION
@@ -166,8 +167,3 @@ int main(void) {
        META DIAVASAME TO EXCEL KAI THA FTIAXTOUN
       OI KOMVOI THS LISTAS KAI ANALOGA ME TO AN YPARXEI 1 STO 3o PEDIO KATHE GRAMMHS TOU EXCELL .EDW PAIZEITAI OLO TO PRAGMA
       ME TO PWS THA KANOUME TIS SUGKRISEIS APODOTIKA NA MHN KSANAGURNAME PISW SUNEXEIA .EPISHS ISWS H PRWTH DOMH STRUCT ARRAY ISWS PREPEI NA GINEI DENTRO*/
-
-
-    return 0;
-
-}
