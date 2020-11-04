@@ -21,7 +21,7 @@ void initializeProgramParameters(int argc, char **argv, programParameters_t *pro
   for (int i = 1; i < argc; i += 2)
   {
     if (strcmp("-d", argv[i]) == 0)
-      strcpy(programParameters->inputFilePath, argv[i + 1]);
+      strcpy(programParameters->inputDirPath, argv[i + 1]);
     else if (strcmp("-q", argv[i]) == 0)
       strcpy(programParameters->queryFilePath, argv[i + 1]);
     else
@@ -35,6 +35,6 @@ void initializeProgramParameters(int argc, char **argv, programParameters_t *pro
 
 void printProgramParameters(programParameters_t programParameters)
 {
-  printf("Input file path: %s\n", programParameters.inputFilePath);
+  printf("Input file path: %s\n", programParameters.inputDirPath);
   printf("Query file path: %s\n", programParameters.queryFilePath);
 }

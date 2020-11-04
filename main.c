@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
 #include "cmdLineParameters.h"
+#include "fileIO.h"
 
 
 int main(int argc, char **argv)
@@ -9,7 +12,7 @@ int main(int argc, char **argv)
 
 
   initializeProgramParameters(argc, argv, &programParameters);
-  printProgramParameters(programParameters);
+  storeInputDatasetInMemory(programParameters.inputDirPath);
 
   return 0;
 }

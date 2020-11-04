@@ -6,7 +6,7 @@
 
 typedef struct programParameters_t
 {
-  char inputFilePath[FILENAME_MAX];
+  char inputDirPath[FILENAME_MAX];
   char queryFilePath[FILENAME_MAX];
 } programParameters_t;
 
