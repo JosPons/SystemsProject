@@ -2,8 +2,11 @@
 #define SYSTEMSPROJECT_FILEIO_H
 
 
+FILE *openFile(char *);
+void closeFile(char *, FILE *);
 DIR *openDirectory(char *);
 void closeDirectory(char *, DIR *);
 void storeInputDatasetInMemory(char *);
+void storeQueryDatasetInClique(char *);
 
 #endif //SYSTEMSPROJECT_FILEIO_H

@@ -5,6 +5,30 @@
 #include "fileIO.h"
 
 
+FILE *openFile(char *path)
+{
+  FILE *fileFd;
+
+  fileFd = fopen(path, "r");
+  if (fileFd == NULL)
+  {
+    fprintf(stderr, "Error, couldn't open file at \"%s\" : ", path);
+    perror("");
+    exit(1);
+  }
+  return fileFd;
+}
+
+void closeFile(char *path, FILE *fd)
+{
+  if (fclose(fd) != 0)
+  {
+    fprintf(stderr, "Error, couldn't close file at \"%s\" : ", path);
+    perror("");
+    exit(1);
+  }
+}
+
 DIR *openDirectory(char *path)
 {
   DIR *inputDirFd;
@@ -69,4 +93,30 @@ void storeInputDatasetInMemory(char *path)
   printf("Number of directories: %d\n", numberOfDirectories);
   printf("Number of files: %d\n", numberOfFiles);
   closeDirectory(path, DirectoryFd);
+}
+
+void storeQueryDatasetInClique(char *path)
+{
+  char lineBuffer[FILENAME_MAX];
+  char leftSpecSite[FILENAME_MAX];
+  char rightSpecSite[FILENAME_MAX];
+  char leftSpecId[FILENAME_MAX];
+  char rightSpecId[FILENAME_MAX];
+  char matchFlag[FILENAME_MAX];
+  FILE *fileFd;
+
+  fileFd = openFile(path);
+  /* Read the first line and get rid of it */
+  fgets(lineBuffer, 4096, fileFd);
+  while (fgets(lineBuffer, 4096, fileFd) != NULL)
+  {
+    sscanf(lineBuffer, "%90[^/]// %[^,],%90[^/]// %[^,],%[^\n]\n",
+           leftSpecSite, leftSpecId, rightSpecSite, rightSpecId, matchFlag);
+    printf("Left spec site: %s\n", leftSpecSite);
+    printf("Left spec id: %s\n", leftSpecId);
+    printf("Right spec site: %s\n", rightSpecSite);
+    printf("Left spec id: %s\n", rightSpecId);
+    printf("Spec match flag: %s\n", matchFlag);
+  }
+  closeFile(path, fileFd);
 }
