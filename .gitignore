@@ -3,4 +3,3 @@ cmake-build-debug/*
 CMakeLists.txt
 *.xml
 *.o
-cmake-build-debug/CMakeFiles/SystemsProject.dir/fileIO.c.o
