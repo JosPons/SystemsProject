@@ -1,6 +1,7 @@
 #ifndef SYSTEMSPROJECT_FILEIO_H
 #define SYSTEMSPROJECT_FILEIO_H
 
+#include <dirent.h>
 
 FILE *openFile(char *);
 void closeFile(char *, FILE *);
