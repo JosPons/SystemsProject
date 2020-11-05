@@ -1,8 +1,6 @@
-
-CMakeLists.txt
-cmake-build-debug/*
 .idea/*
+cmake-build-debug/*
+CMakeLists.txt
 *.xml
 *.o
 cmake-build-debug/CMakeFiles/SystemsProject.dir/fileIO.c.o
-*.o
