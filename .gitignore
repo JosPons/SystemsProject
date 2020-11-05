@@ -1,12 +1,5 @@
 
 CMakeLists.txt
-cmake-build-debug/SystemsProject.cbp
-cmake-build-debug/Makefile
-cmake-build-debug/CMakeFiles/*
-cmake-build-debug/CMakeCache.txt
-cmake-build-debug/cmake_install.cmake
-.idea/SystemsProject.iml
-.idea/modules.xml
-.idea/misc.xml
+cmake-build-debug/*
+.idea/*
 *.xml
-cmake-build-debug/SystemsProject.exe
