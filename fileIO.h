@@ -2,12 +2,16 @@
 #define SYSTEMSPROJECT_FILEIO_H
 
 #include <dirent.h>
+#include "hashTable.h"
 
-FILE *openFile(char *);
-void closeFile(char *, FILE *);
+FILE *openInputFile(char *);
+void closeInputFile(char *, FILE *);
+FILE *openOutputFile(char *);
+void closeOutputFile(char *, FILE *);
 DIR *openDirectory(char *);
 void closeDirectory(char *, DIR *);
-void storeInputDatasetInMemory(char *);
-void storeQueryDatasetInClique(char *);
+int countNumberOfFiles(char *);
+void storeInputDatasetInMemory(char *, hashTable_t *);
+void storeQueryDatasetInClique(char *, hashTable_t);
 
 #endif //SYSTEMSPROJECT_FILEIO_H

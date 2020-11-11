@@ -8,6 +8,7 @@ typedef struct programParameters_t
 {
   char inputDirPath[FILENAME_MAX];
   char queryFilePath[FILENAME_MAX];
+  char outputFilePath[FILENAME_MAX];
 } programParameters_t;
 
 void initializeProgramParameters();

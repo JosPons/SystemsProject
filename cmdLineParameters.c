@@ -12,7 +12,7 @@ void initializeProgramParameters(int argc, char **argv, programParameters_t *pro
    * –q <query file>
    */
 
-  if (argc != 5)
+  if (argc != 7)
   {
     printf("Expected number of arguments is 4\n");
     exit(1);
@@ -24,10 +24,12 @@ void initializeProgramParameters(int argc, char **argv, programParameters_t *pro
       strcpy(programParameters->inputDirPath, argv[i + 1]);
     else if (strcmp("-q", argv[i]) == 0)
       strcpy(programParameters->queryFilePath, argv[i + 1]);
+    else if (strcmp("-o", argv[i]) == 0)
+      strcpy(programParameters->outputFilePath, argv[i + 1]);
     else
     {
       fprintf(stderr, "Wrong type of argument prefix.\nExpected list of \\"
-                      "values: \' -d -q \'\n");
+                      "values: \' -d -q -o \'\n");
       exit(1);
     }
   }
@@ -37,4 +39,5 @@ void printProgramParameters(programParameters_t programParameters)
 {
   printf("Input file path: %s\n", programParameters.inputDirPath);
   printf("Query file path: %s\n", programParameters.queryFilePath);
+  printf("Output file path: %s\n", programParameters.outputFilePath);
 }
