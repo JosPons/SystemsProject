@@ -2,6 +2,7 @@
 #define SYSTEMSPROJECT_HASHTABLE_H
 
 #include <stdio.h>
+#include "clique.h"
 
 typedef struct bucketElement_t
 {
@@ -28,7 +29,7 @@ typedef struct hashTable_t
 
 void createHashTable(hashTable_t *, int);
 void destroyHashTable(hashTable_t);
-void insertHashTable(hashTable_t *, char *, char *, int);
+void insertHashTable(hashTable_t *, char *, char *, int, clique_t *);
 int searchHashTable(hashTable_t, char *, char *, int);
 void resizeBucket(bucket_t *);
 void printHashTable(hashTable_t, FILE *);

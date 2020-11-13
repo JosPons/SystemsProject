@@ -11,7 +11,7 @@ void closeOutputFile(char *, FILE *);
 DIR *openDirectory(char *);
 void closeDirectory(char *, DIR *);
 int countNumberOfFiles(char *);
-void storeInputDatasetInMemory(char *, hashTable_t *);
-void storeQueryDatasetInClique(char *, hashTable_t);
+void storeInputDatasetInMemory(char *, hashTable_t *, clique_t *);
+void storeQueryDatasetInClique(char *, hashTable_t, clique_t *);
 
 #endif //SYSTEMSPROJECT_FILEIO_H

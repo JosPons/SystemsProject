@@ -5,7 +5,7 @@
 #include "murmur3.h"
 
 #define BUCKET_SIZE 4
-#define SEED 83 // Arbitary seed value used by 'Murmur' hash function
+#define SEED 83 // Arbitrary seed value used by 'Murmur' hash function.
 
 
 //***************************************************************************************************//
@@ -41,24 +41,29 @@ void destroyHashTable(hashTable_t hashTable)
   free(hashTable.hashTableArray);
 }
 
-void insertHashTable(hashTable_t *hashTable, char *key, char *itemSiteName, int itemId)
+void insertHashTable(hashTable_t *hashTable, char *key, char *itemSiteName, int itemId, clique_t *clique)
 {
   uint64_t hashKey128[4];
   uint32_t hashKey;
   int freeBucketIndex;
 
-  /* Here i will call the hash function and pass itemId as it's argument */
   MurmurHash3_x64_128(key, (int) strlen(key), SEED, hashKey128);
   assert(hashKey128[0] >= 0);
   hashKey = hashKey128[0] % hashTable->hashTableSize;
   freeBucketIndex = hashTable->hashTableArray[hashKey].freeBucketIndex;
   if (hashTable->hashTableArray[hashKey].bucketElements == hashTable->hashTableArray[hashKey].bucketSize)
     resizeBucket(&hashTable->hashTableArray[hashKey]);
+  /* Update the fields of the element in the hash table */
   strcpy(hashTable->hashTableArray[hashKey].bucketArray[freeBucketIndex].itemSiteName, itemSiteName);
   hashTable->hashTableArray[hashKey].bucketArray[freeBucketIndex].itemId = itemId;
   hashTable->hashTableArray[hashKey].bucketArray[freeBucketIndex].cliqueArrayIndex = hashTable->cliqueFreeArrayIndex;
+  /* Also insert the element in the clique and initialize it's fields */
+  insertClique(clique, itemId, itemSiteName, hashTable->cliqueFreeArrayIndex);
+  /* Update the fields of the bucket, where the element belongs to */
   hashTable->hashTableArray[hashKey].bucketElements++;
   hashTable->hashTableArray[hashKey].freeBucketIndex++;
+  /* Update the number of elements of the hash table and the next available
+   * clique index, where we 'll add the next element */
   hashTable->hashTableElements++;
   hashTable->cliqueFreeArrayIndex++;
 }
@@ -70,7 +75,6 @@ int searchHashTable(hashTable_t hashTable, char *key, char *itemSiteName, int it
   bucket_t bucket;
   bucketElement_t bucketElement;
 
-  /* Here i will call the hash function and pass itemId as it's argument */
   MurmurHash3_x64_128(key, (int) strlen(key), SEED, hashKey128);
   assert(hashKey128[0] >= 0);
   hashKey = hashKey128[0] % hashTable.hashTableSize;
@@ -101,16 +105,16 @@ void resizeBucket(bucket_t *bucket)
 void printHashTable(hashTable_t hashTable, FILE *outputFd)
 {
   fprintf(outputFd, "------------------------------------------------------\n");
-  fprintf(outputFd, "Hash table size: %u\n", hashTable.hashTableSize);
-  fprintf(outputFd, "Hash table elements: %u\n", hashTable.hashTableElements);
-  fprintf(outputFd, "Hash table free clique index: %u\n", hashTable.cliqueFreeArrayIndex);
+  fprintf(outputFd, "Hash table size: %d\n", hashTable.hashTableSize);
+  fprintf(outputFd, "Hash table elements: %d\n", hashTable.hashTableElements);
+  fprintf(outputFd, "Hash table free clique index: %d\n", hashTable.cliqueFreeArrayIndex);
   fprintf(outputFd, "------------------------------------------------------\n");
   for (int i = 0; i < hashTable.hashTableSize; i++)
   {
     fprintf(outputFd, "------------------------------------------------------\n");
-    fprintf(outputFd, "Hash[%u] bucketSize: %u\n", i, hashTable.hashTableArray[i].bucketSize);
-    fprintf(outputFd, "Hash[%u] bucketElements: %u\n", i, hashTable.hashTableArray[i].bucketElements);
-    fprintf(outputFd, "Hash[%u] freeBucketIndex: %u\n", i, hashTable.hashTableArray[i].freeBucketIndex);
+    fprintf(outputFd, "Hash[%u] bucketSize: %d\n", i, hashTable.hashTableArray[i].bucketSize);
+    fprintf(outputFd, "Hash[%u] bucketElements: %d\n", i, hashTable.hashTableArray[i].bucketElements);
+    fprintf(outputFd, "Hash[%u] freeBucketIndex: %d\n", i, hashTable.hashTableArray[i].freeBucketIndex);
     fprintf(outputFd, "------------------------------------------------------\n");
     for (int j = 0; j < hashTable.hashTableArray[i].bucketSize; j++)
     {

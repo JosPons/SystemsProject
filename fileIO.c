@@ -111,7 +111,7 @@ int countNumberOfFiles(char *path)
   return numberOfFiles;
 }
 
-void storeInputDatasetInMemory(char *path, hashTable_t *hashTable)
+void storeInputDatasetInMemory(char *path, hashTable_t *hashTable, clique_t *clique)
 {
   char rootDirectoryName[FILENAME_MAX];
   char subDirectoryName[FILENAME_MAX];
@@ -151,7 +151,7 @@ void storeInputDatasetInMemory(char *path, hashTable_t *hashTable)
       strcpy(hashTableKey, siteName);
       strcat(hashTableKey, strtok(dirInfo->d_name, "."));
       /* Insert the item with hashKey, siteName and itemId in the hash table */
-      insertHashTable(hashTable, hashTableKey, siteName, itemId);
+      insertHashTable(hashTable, hashTableKey, siteName, itemId, clique);
       numberOfFiles++;
     }
     closeDirectory(subDirectoryName, directoryFileFd);
@@ -159,7 +159,7 @@ void storeInputDatasetInMemory(char *path, hashTable_t *hashTable)
   closeDirectory(path, directoryFd);
 }
 
-void storeQueryDatasetInClique(char *path, hashTable_t hashTable)
+void storeQueryDatasetInClique(char *path, hashTable_t hashTable, clique_t *clique)
 {
   char lineBuffer[FILENAME_MAX];
   char leftSpecSite[FILENAME_MAX];
@@ -169,6 +169,8 @@ void storeQueryDatasetInClique(char *path, hashTable_t hashTable)
   char matchFlag[2];
   char hashTableKey[FILENAME_MAX];
   char *endptr; // For strtol() function use
+  int leftSpecIndex;
+  int rightSpecIndex;
   FILE *fileFd;
 
   fileFd = openInputFile(path);
@@ -182,13 +184,13 @@ void storeQueryDatasetInClique(char *path, hashTable_t hashTable)
     /* Create the hashKey of the left spec */
     strcpy(hashTableKey, leftSpecSite);
     strcat(hashTableKey, leftSpecId);
-    printf("Left  hash key: %s | Result: %d\n", hashTableKey,
-           searchHashTable(hashTable, hashTableKey, leftSpecSite, (int) strtol(leftSpecId, &endptr, 0)));
+    leftSpecIndex = searchHashTable(hashTable, hashTableKey, leftSpecSite, (int) strtol(leftSpecId, &endptr, 0));
     /* Create the hashKey of the right spec */
     strcpy(hashTableKey, rightSpecSite);
     strcat(hashTableKey, rightSpecId);
-    printf("Right hash key: %s | Result: %d\n", hashTableKey,
-           searchHashTable(hashTable, hashTableKey, rightSpecSite, (int) strtol(rightSpecId, &endptr, 0)));
+    rightSpecIndex = searchHashTable(hashTable, hashTableKey, rightSpecSite, (int) strtol(rightSpecId, &endptr, 0));
+    /* Insert pair to clique */
+    insertConnectionToClique(clique, leftSpecIndex, rightSpecIndex, (int) strtol(matchFlag, &endptr, 0));
   }
   closeInputFile(path, fileFd);
 }
