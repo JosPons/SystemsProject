@@ -18,6 +18,8 @@ typedef struct cliqueElement_t
   int negIndexPrev;
   int posPrintFlag;
   int negPrintFlag;
+  int elementBelongsToPosClique;
+  int elementBelongsToNegClique;
 } cliqueElement_t;
 
 typedef struct clique_t

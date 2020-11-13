@@ -26,8 +26,8 @@ int main(int argc, char **argv)
   outputFd = openOutputFile(programParameters.outputFilePath);
 //  printHashTable(hashTable, outputFd);
 //  printClique(clique, outputFd);
-  printPositiveCliquePairs(&clique, outputFd);
-//  printNegativeCliquePairs(&clique, outputFd);
+//  printPositiveCliquePairs(&clique, outputFd);
+  printNegativeCliquePairs(&clique, outputFd);
   closeOutputFile(programParameters.outputFilePath, outputFd);
 
   /* Destroy data structures */

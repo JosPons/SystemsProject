@@ -48,6 +48,18 @@ void insertConnectionToClique(clique_t *clique, int leftSpecCliqueIndex, int rig
 
   if (matchFlag == 1)
   {
+    if (clique->cliqueArray[leftSpecCliqueIndex].elementBelongsToPosClique == 1)
+    {
+      int innerCliqueIndex = clique->cliqueArray[leftSpecCliqueIndex].posIndexNext;
+      while (innerCliqueIndex != leftSpecCliqueIndex)
+      {
+        /* If both elements appear in the same clique, dont connect them again and return */
+        if (innerCliqueIndex == rightSpecCliqueIndex)
+          return;
+        innerCliqueIndex = clique->cliqueArray[innerCliqueIndex].posIndexNext;
+      }
+    }
+
     int rightPrevious = clique->cliqueArray[rightSpecCliqueIndex].posIndexPrev;
     int leftNext = clique->cliqueArray[leftSpecCliqueIndex].posIndexNext;
 
@@ -59,9 +71,24 @@ void insertConnectionToClique(clique_t *clique, int leftSpecCliqueIndex, int rig
     clique->cliqueArray[leftSpecCliqueIndex].posIndexNext = rightSpecCliqueIndex;
     /* 4th step */
     clique->cliqueArray[rightSpecCliqueIndex].posIndexPrev = leftSpecCliqueIndex;
+
+    clique->cliqueArray[leftSpecCliqueIndex].elementBelongsToPosClique = 1;
+    clique->cliqueArray[rightSpecCliqueIndex].elementBelongsToPosClique = 1;
   }
   else if (matchFlag == 0)
   {
+    if (clique->cliqueArray[leftSpecCliqueIndex].elementBelongsToNegClique == 1)
+    {
+      int innerCliqueIndex = clique->cliqueArray[leftSpecCliqueIndex].negIndexNext;
+      while (innerCliqueIndex != leftSpecCliqueIndex)
+      {
+        /* If both elements appear in the same clique, dont connect them again and return */
+        if (innerCliqueIndex == rightSpecCliqueIndex)
+          return;
+        innerCliqueIndex = clique->cliqueArray[innerCliqueIndex].negIndexNext;
+      }
+    }
+
     int rightPrevious = clique->cliqueArray[rightSpecCliqueIndex].negIndexPrev;
     int leftNext = clique->cliqueArray[leftSpecCliqueIndex].negIndexNext;
 
@@ -73,6 +100,9 @@ void insertConnectionToClique(clique_t *clique, int leftSpecCliqueIndex, int rig
     clique->cliqueArray[leftSpecCliqueIndex].negIndexNext = rightSpecCliqueIndex;
     /* 4th step */
     clique->cliqueArray[rightSpecCliqueIndex].negIndexPrev = leftSpecCliqueIndex;
+
+    clique->cliqueArray[leftSpecCliqueIndex].elementBelongsToNegClique = 1;
+    clique->cliqueArray[rightSpecCliqueIndex].elementBelongsToNegClique = 1;
   }
   else
   {
