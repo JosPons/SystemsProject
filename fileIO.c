@@ -94,7 +94,8 @@ int countNumberOfFiles(char *path)
     if (strcmp(dirInfo->d_name, ".") == 0 || strcmp(dirInfo->d_name, "..") == 0)
       continue;
     strcpy(subDirectoryName, path);
-    strcat(strcat(subDirectoryName, "\\"), dirInfo->d_name);
+//    strcat(strcat(subDirectoryName, "\\"), dirInfo->d_name); // For Windows paths
+    strcat(strcat(subDirectoryName, "/"), dirInfo->d_name); // For linux paths
     /* Iterate through each sub-directory file*/
     directoryFileFd = openDirectory(subDirectoryName);
     while ((dirInfo = readdir(directoryFileFd)) != NULL)
@@ -102,7 +103,8 @@ int countNumberOfFiles(char *path)
       if (strcmp(dirInfo->d_name, ".") == 0 || strcmp(dirInfo->d_name, "..") == 0)
         continue;
       strcpy(fileName, subDirectoryName);
-      strcat(strcat(fileName, "\\"), dirInfo->d_name);
+//      strcat(strcat(fileName, "\\"), dirInfo->d_name); // For Windows paths
+      strcat(strcat(fileName, "/"), dirInfo->d_name); // For linux paths
       numberOfFiles++;
     }
     closeDirectory(subDirectoryName, directoryFileFd);
@@ -133,7 +135,8 @@ void storeInputDatasetInMemory(char *path, hashTable_t *hashTable, clique_t *cli
     if (strcmp(dirInfo->d_name, ".") == 0 || strcmp(dirInfo->d_name, "..") == 0)
       continue;
     strcpy(subDirectoryName, path);
-    strcat(strcat(subDirectoryName, "\\"), dirInfo->d_name);
+//    strcat(strcat(subDirectoryName, "\\"), dirInfo->d_name); // For Windows paths
+    strcat(strcat(subDirectoryName, "/"), dirInfo->d_name); // For linux paths
     strcpy(siteName, dirInfo->d_name);
 
     /* Iterate through each sub-directory file*/
@@ -143,7 +146,8 @@ void storeInputDatasetInMemory(char *path, hashTable_t *hashTable, clique_t *cli
       if (strcmp(dirInfo->d_name, ".") == 0 || strcmp(dirInfo->d_name, "..") == 0)
         continue;
       strcpy(fileName, subDirectoryName);
-      strcat(strcat(fileName, "\\"), dirInfo->d_name);
+//      strcat(strcat(fileName, "\\"), dirInfo->d_name); // For Windows paths
+      strcat(strcat(fileName, "/"), dirInfo->d_name); // For linux paths
 
       /* Convert the itemId from string to integer */
       itemId = (int) strtol(dirInfo->d_name, &endptr, 0);
