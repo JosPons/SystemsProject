@@ -56,6 +56,7 @@ void insertConnectionToClique(clique_t *clique, int leftSpecCliqueIndex, int rig
         /* If both elements appear in the same clique, dont connect them again and return */
         if (innerCliqueIndex == rightSpecCliqueIndex)
           return;
+        //TEST SXOLIO
         innerCliqueIndex = clique->cliqueArray[innerCliqueIndex].posIndexNext;
       }
     }
