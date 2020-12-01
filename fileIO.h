@@ -6,6 +6,7 @@
 
 FILE *openInputFile(char *);
 void closeInputFile(char *, FILE *);
+char* writeJsonString(char *path);
 FILE *openOutputFile(char *);
 void closeOutputFile(char *, FILE *);
 DIR *openDirectory(char *);

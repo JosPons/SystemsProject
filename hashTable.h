@@ -28,10 +28,15 @@ typedef struct hashTable_t
 } hashTable_t;
 
 void createHashTable(hashTable_t *, int);
+
 void destroyHashTable(hashTable_t);
-void insertHashTable(hashTable_t *, char *, char *, int, clique_t *);
+
+void insertHashTable(hashTable_t *, char *, char *, int, clique_t *, char *);
+
 int searchHashTable(hashTable_t, char *, char *, int);
+
 void resizeBucket(bucket_t *);
+
 void printHashTable(hashTable_t, FILE *);
 
 #endif //SYSTEMSPROJECT_HASHTABLE_H

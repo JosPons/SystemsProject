@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "clique.h"
+#include "fileIO.h"
 
+#define SPECS_SIZE 10
+#define isWhitespace(x)                         x == '\r' || x == '\n' || x == '\t' || x == ' '
 
 void createClique(clique_t *clique, int cliqueSize)
 {
@@ -19,22 +22,47 @@ void createClique(clique_t *clique, int cliqueSize)
     clique->cliqueArray[i].posIndexPrev = -1;
     clique->cliqueArray[i].negIndexNext = -1;
     clique->cliqueArray[i].negIndexPrev = -1;
+    clique->cliqueArray[i].specData.elementSpecs = calloc(SPECS_SIZE, sizeof(keyValuePair_t));
+    if (clique->cliqueArray[i].specData.elementSpecs == NULL)
+    {
+      perror("Error, couldn't allocate memory for \"elementSpecs\"");
+      exit(1);
+    }
   }
 }
 
 void destroyClique(clique_t clique)
 {
+  for (int i = 0; i < clique.cliqueSize; i++)
+    free(clique.cliqueArray[i].specData.elementSpecs);
   free(clique.cliqueArray);
 }
 
-void insertClique(clique_t *clique, int itemId, char *itemSiteName, int cliqueArrayIndex)
+void resizeElementData_t(elementData_t *elementData)
+{
+  int oldSize = elementData->SpecsSize;
+  elementData->SpecsSize = elementData->SpecsSize * 2;
+  elementData->elementSpecs = realloc(elementData->elementSpecs, sizeof(keyValuePair_t) * elementData->SpecsSize);
+  if (elementData->elementSpecs == NULL)
+  {
+    perror("Error, couldn't re-allocate memory for \"bucketArray\"");
+    exit(1);
+  }
+  memset(elementData->elementSpecs + oldSize, 0, sizeof(keyValuePair_t) * oldSize);
+}
+
+
+void insertClique(clique_t *clique, int itemId, char *itemSiteName, int cliqueArrayIndex, char *jsonFile)
 {
   strcpy(clique->cliqueArray[cliqueArrayIndex].specData.itemSiteName, itemSiteName);
   clique->cliqueArray[cliqueArrayIndex].specData.itemId = itemId;
+  parseJsonGen(&clique->cliqueArray[cliqueArrayIndex].specData, writeJsonString(jsonFile));
   clique->cliqueArray[cliqueArrayIndex].posIndexNext = cliqueArrayIndex;
   clique->cliqueArray[cliqueArrayIndex].posIndexPrev = cliqueArrayIndex;
   clique->cliqueArray[cliqueArrayIndex].negIndexNext = cliqueArrayIndex;
   clique->cliqueArray[cliqueArrayIndex].negIndexPrev = cliqueArrayIndex;
+
+
 }
 
 void insertConnectionToClique(clique_t *clique, int leftSpecCliqueIndex, int rightSpecCliqueIndex, int matchFlag)
@@ -74,8 +102,7 @@ void insertConnectionToClique(clique_t *clique, int leftSpecCliqueIndex, int rig
 
     clique->cliqueArray[leftSpecCliqueIndex].elementBelongsToPosClique = 1;
     clique->cliqueArray[rightSpecCliqueIndex].elementBelongsToPosClique = 1;
-  }
-  else if (matchFlag == 0)
+  } else if (matchFlag == 0)
   {
     if (clique->cliqueArray[leftSpecCliqueIndex].elementBelongsToNegClique == 1)
     {
@@ -103,8 +130,7 @@ void insertConnectionToClique(clique_t *clique, int leftSpecCliqueIndex, int rig
 
     clique->cliqueArray[leftSpecCliqueIndex].elementBelongsToNegClique = 1;
     clique->cliqueArray[rightSpecCliqueIndex].elementBelongsToNegClique = 1;
-  }
-  else
+  } else
   {
     printf("Error, incorrect match flag code: %d\n", matchFlag);
     exit(1);
@@ -226,4 +252,117 @@ void printClique(clique_t clique, FILE *outputFd)
     fprintf(outputFd, "\tNegative Print Flag : %d\n", clique.cliqueArray[i].negPrintFlag);
     fprintf(outputFd, "------------------------------------------------------\n");
   }
+}
+
+int strNextChar(char *str, char ch)
+{
+  int pos = 0;
+
+  if (str == NULL)
+    return -1;
+
+  while (*str != ch && *str != '\0')
+  {
+    str++;
+    pos++;
+  }
+  if (*str == '\0')
+    return -1;
+  else
+    return pos;
+}
+
+void parseJsonGen(elementData_t *elementData, char *jsonStr)
+{
+  int offset = 0;
+  parseJsonRecur(elementData, jsonStr, &offset);
+}
+
+void parseJsonRecur(elementData_t *elementData, char *jsonStr, int *offset)
+{
+
+  int offsetRecur = 0;
+  while (*jsonStr != '\0')
+  {
+    while (isWhitespace(*jsonStr))  //remove white spaces
+    {
+      jsonStr++;
+      offsetRecur++;
+    };
+    if (*jsonStr == '{')
+    {
+      jsonStr++;
+      offsetRecur++;
+    } else if (*jsonStr == '"')
+    {
+
+      int i = strNextChar(++jsonStr, '"');
+      if (i > 1)
+      {
+        
+        keyValuePair_t tempPtr = elementData->elementSpecs[elementData->SpecsSize - 1];
+
+        tempPtr.key = (char *) malloc(i + 1 * sizeof(char));
+        memcpy(tempPtr.key, jsonStr, i * sizeof(char));
+        tempPtr.key[i] = '\0';
+
+        jsonStr += i + 1;
+        offsetRecur += i + 2;
+
+        i = strNextChar(jsonStr, ':');
+        if (i == -1)
+          break;
+        jsonStr += i + 1;
+        offsetRecur += i + 1;
+
+        while (isWhitespace(*jsonStr))
+        {
+          jsonStr++;
+          offsetRecur++;
+        };
+
+        if (*jsonStr == '{')
+        {
+          int offsetRecurBeforeParsingChildOb = offsetRecur;
+          int sizeOfChildObj;
+
+          tempPtr.value = (jsonvalue *) malloc(sizeof(jsonvalue));
+          parseJsonRecur(tempPtr.value->jsonObject, jsonStr, &offsetRecur);       //reminder:check recursive for seg
+          if (tempPtr.value->jsonObject == NULL)
+          {
+            break;
+          }
+          sizeOfChildObj = offsetRecur - offsetRecurBeforeParsingChildOb;     //move pointer after the json childarray
+          jsonStr += sizeOfChildObj;
+        } else if (*jsonStr == '"')
+        {
+          i = strNextChar(++jsonStr, '"');
+          if (i == -1)
+          {
+            break;
+          }
+          tempPtr.value = (jsonvalue *) malloc(sizeof(jsonvalue));
+          tempPtr.value->stringValue = (char *) malloc(i + 1 * sizeof(char));
+          memcpy(tempPtr.value->stringValue, jsonStr, i * sizeof(char));
+          tempPtr.value->stringValue[i] = '\0';
+          jsonStr += i + 1;
+          offsetRecur += i + 2;
+        }
+        elementData->elementSpecs[elementData->SpecsSize - 1] = tempPtr;
+      }
+    } else if (*jsonStr == ',')
+    {
+      elementData->elementSpecs++;
+      if (elementData->SpecsSize > SPECS_SIZE)
+        resizeElementData_t(elementData);      //if specsize exceeds starting size ,expand
+
+      jsonStr++;
+      offsetRecur++;
+    } else if (*jsonStr == '}')
+    {
+      (*offset) += offsetRecur + 1;
+
+    }
+  }
+
 }

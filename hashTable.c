@@ -41,7 +41,8 @@ void destroyHashTable(hashTable_t hashTable)
   free(hashTable.hashTableArray);
 }
 
-void insertHashTable(hashTable_t *hashTable, char *key, char *itemSiteName, int itemId, clique_t *clique)
+void
+insertHashTable(hashTable_t *hashTable, char *key, char *itemSiteName, int itemId, clique_t *clique, char *fileName)
 {
   uint64_t hashKey128[4];
   uint32_t hashKey;
@@ -58,7 +59,7 @@ void insertHashTable(hashTable_t *hashTable, char *key, char *itemSiteName, int 
   hashTable->hashTableArray[hashKey].bucketArray[freeBucketIndex].itemId = itemId;
   hashTable->hashTableArray[hashKey].bucketArray[freeBucketIndex].cliqueArrayIndex = hashTable->cliqueFreeArrayIndex;
   /* Also insert the element in the clique and initialize it's fields */
-  insertClique(clique, itemId, itemSiteName, hashTable->cliqueFreeArrayIndex);
+  insertClique(clique, itemId, itemSiteName, hashTable->cliqueFreeArrayIndex, fileName);
   /* Update the fields of the bucket, where the element belongs to */
   hashTable->hashTableArray[hashKey].bucketElements++;
   hashTable->hashTableArray[hashKey].freeBucketIndex++;
@@ -87,6 +88,7 @@ int searchHashTable(hashTable_t hashTable, char *key, char *itemSiteName, int it
   }
   return -1;
 }
+
 //***************************************************************************************************//
 //***************************************************************************************************//
 void resizeBucket(bucket_t *bucket)
@@ -101,6 +103,7 @@ void resizeBucket(bucket_t *bucket)
   }
   memset(bucket->bucketArray + oldSize, 0, sizeof(bucketElement_t) * oldSize);
 }
+
 
 void printHashTable(hashTable_t hashTable, FILE *outputFd)
 {

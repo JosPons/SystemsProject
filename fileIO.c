@@ -3,6 +3,7 @@
 #include <string.h>
 #include "fileIO.h"
 
+#define SIZE_LINE 256
 
 FILE *openInputFile(char *path)
 {
@@ -17,6 +18,57 @@ FILE *openInputFile(char *path)
   }
   return fd;
 }
+
+int countlines(char *filename)
+{
+  FILE *fd;
+  int ch = 0;
+  int lines = 0;
+
+  fd = fopen(filename, "r");
+  if (fd == NULL)
+  {
+    fprintf(stderr, "Error, couldn't open file at \"%s\" : ", filename);
+    perror("");
+    exit(1);
+  }
+
+  lines++;
+  while ((ch = fgetc(fd)) != EOF)
+  {
+    if (ch == '\n')
+      lines++;
+  }
+  fclose(fd);
+  return lines;
+}
+
+char *writeJsonString(char *filename)
+{
+  FILE *fd;
+  int i = 0;
+  int filesize = countlines(filename);
+  char jsonstr[filesize][SIZE_LINE];
+  char *jsonStr;
+
+  fd = fopen(filename, "r");
+
+  if (fd == NULL)
+  {
+    fprintf(stderr, "Error, couldn't open file at \"%s\" : ", filename);
+    perror("");
+    exit(1);
+  }
+
+  while (fgets(jsonstr[i], SIZE_LINE, fd))
+  {
+    jsonstr[i][strlen(jsonstr[i]) - 1] = '\0';
+    i++;
+  }
+  fclose(fd);
+  return jsonStr;
+}
+
 
 void closeInputFile(char *path, FILE *fd)
 {
@@ -155,7 +207,7 @@ void storeInputDatasetInMemory(char *path, hashTable_t *hashTable, clique_t *cli
       strcpy(hashTableKey, siteName);
       strcat(hashTableKey, strtok(dirInfo->d_name, "."));
       /* Insert the item with hashKey, siteName and itemId in the hash table */
-      insertHashTable(hashTable, hashTableKey, siteName, itemId, clique);
+      insertHashTable(hashTable, hashTableKey, siteName, itemId, clique, fileName);//dirInfo PREPEI NA TO PERASW EDW
       numberOfFiles++;
     }
     closeDirectory(subDirectoryName, directoryFileFd);
